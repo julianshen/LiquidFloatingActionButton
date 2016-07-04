@@ -132,6 +132,7 @@ public class LiquidFloatingActionButton : UIView {
         overlayView.addSubview(uiEffectView)
         
         print("insert subview")
+        print(self.superview?)
         self.superview?.insertSubview(overlayView, aboveSubview: self.superview!.subviews.last!)
         self.superview?.bringSubviewToFront(self)
         print("insert subview end")
