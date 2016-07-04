@@ -111,6 +111,7 @@ public class LiquidFloatingActionButton : UIView {
 
     // setup overlay view
     private func setupOverlay() {
+        print("setup overlay")
         if let oldBlurView = overlayView.subviews.first {
             oldBlurView.removeFromSuperview()
         }
@@ -155,7 +156,7 @@ public class LiquidFloatingActionButton : UIView {
 
         self.baseView.open(cells)
         dismissOverlay()
-        
+
         self.isClosed = false
     }
 
