@@ -79,6 +79,8 @@ public class LiquidFloatingActionButton : UIView {
     private var baseView = CircleLiquidBaseView()
     private let liquidView = UIView()
 
+    private let overlayView = UIControl()
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -107,9 +109,41 @@ public class LiquidFloatingActionButton : UIView {
         return result
     }
 
+    // setup overlay view
+    private func setupOverlay() {
+        if let oldBlurView = overlayView.subviews.first {
+            oldBlurView.removeFromSuperview()
+        }
+        
+        //re-init blur view
+        let blurEffect = UIBlurEffect(style: .Dark)
+        let uiEffectView = UIVisualEffectView(effect: blurEffect)
+        
+        // Make overlay view same size as screen
+        overlayView.frame = CGRectMake(
+            0,0,
+            UIScreen.mainScreen().bounds.width,
+            UIScreen.mainScreen().bounds.height
+        )
+
+        uiEffectView.frame = overlayView.bounds
+        overlayView.addSubview(uiEffectView)
+        
+        self.superview?.insertSubview(overlayView, aboveSubview: self.superview!.subviews.last!)
+        self.superview?.bringSubviewToFront(self)
+        overlayView.addTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)
+        uiEffectView.userInteractionEnabled = false
+    }
+    
+    // dismiss overlay
+    private func dismissOverlay() {
+        //overlayView.removeTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)
+        overlayView.removeFromSuperview()
+    }
+
     // open all cells
     public func open() {
-        
+        setupOverlay()
         // rotate plus icon
         CATransaction.setAnimationDuration(0.8)
         self.plusLayer.transform = CATransform3DMakeRotation((CGFloat(M_PI) * rotationDegrees) / 180, 0, 0, 1)
@@ -120,6 +154,7 @@ public class LiquidFloatingActionButton : UIView {
         }
 
         self.baseView.open(cells)
+        dismissOverlay()
         
         self.isClosed = false
     }
