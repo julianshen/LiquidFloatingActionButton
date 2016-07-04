@@ -132,9 +132,10 @@ public class LiquidFloatingActionButton : UIView {
         overlayView.addSubview(uiEffectView)
         
         print("insert subview")
-        print(self.superview)
+        
         self.superview?.insertSubview(overlayView, aboveSubview: self.superview!.subviews.last!)
         self.superview?.bringSubviewToFront(self)
+        print(self.superview.subViews)
         print("insert subview end")
         overlayView.addTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)
         uiEffectView.userInteractionEnabled = false
