@@ -111,7 +111,6 @@ public class LiquidFloatingActionButton : UIView {
 
     // setup overlay view
     private func setupOverlay() {
-        print("setup overlay")
         if let oldBlurView = overlayView.subviews.first {
             oldBlurView.removeFromSuperview()
         }
@@ -131,12 +130,9 @@ public class LiquidFloatingActionButton : UIView {
         uiEffectView.frame = overlayView.bounds
         overlayView.addSubview(uiEffectView)
         
-        print("insert subview")
-        
-        self.superview?.insertSubview(overlayView, aboveSubview: self.superview!.subviews.last!)
+        self.superview?.insertSubview(overlayView, belowSubview: self)
+        self.superview?.bringSubviewToFront(overlayView)
         self.superview?.bringSubviewToFront(self)
-        print(self.superview!.subviews)
-        print("insert subview end")
         overlayView.addTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)
         uiEffectView.userInteractionEnabled = false
     }
