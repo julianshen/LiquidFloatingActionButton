@@ -111,30 +111,26 @@ public class LiquidFloatingActionButton : UIView {
 
     // setup overlay view
     private func setupOverlay() {
-        if let oldBlurView = overlayView.subviews.first {
-            oldBlurView.removeFromSuperview()
-        }
-        
-        //re-init blur view
-        let blurEffect = UIBlurEffect(style: .Dark)
-        let uiEffectView = UIVisualEffectView(effect: blurEffect)
-        
         // Make overlay view same size as screen
         overlayView.frame = CGRectMake(
             0,0,
             UIScreen.mainScreen().bounds.width,
             UIScreen.mainScreen().bounds.height
         )
-        print(overlayView.frame)
 
-        uiEffectView.frame = overlayView.bounds
-        overlayView.addSubview(uiEffectView)
+        if overlayView.subviews.count == 0 {
+            //re-init blur view
+            let blurEffect = UIBlurEffect(style: .Dark)
+            let uiEffectView = UIVisualEffectView(effect: blurEffect)
+            uiEffectView.frame = overlayView.bounds
+            overlayView.addSubview(uiEffectView)
+            uiEffectView.userInteractionEnabled = false
+        }
         
-        self.superview?.insertSubview(overlayView, belowSubview: self)
+        self.superview?.insertSubview(overlayView, aboveSubview: self)
         self.superview?.bringSubviewToFront(overlayView)
         self.superview?.bringSubviewToFront(self)
-        overlayView.addTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)
-        uiEffectView.userInteractionEnabled = false
+        overlayView.addTarget(self, action: #selector(close), forControlEvents: UIControlEvents.TouchUpInside)   
     }
     
     // dismiss overlay
@@ -156,8 +152,7 @@ public class LiquidFloatingActionButton : UIView {
         }
 
         self.baseView.open(cells)
-        dismissOverlay()
-
+        
         self.isClosed = false
     }
 
@@ -169,7 +164,8 @@ public class LiquidFloatingActionButton : UIView {
         self.plusLayer.transform = CATransform3DMakeRotation(0, 0, 0, 1)
     
         self.baseView.close(cellArray())
-        
+        dismissOverlay()
+
         self.isClosed = true
     }
 
